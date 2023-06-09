@@ -40,6 +40,64 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
+
+        <!-- reflections -->
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+
+        <!-- caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+
+        <!-- fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.83</version>
+        </dependency>
+
+        <!-- jedis -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.10.2</version>
+        </dependency>
+
+        <!-- commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+
+        <!-- lettuce-core -->
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+            <version>6.1.6.RELEASE</version>
+        </dependency>
+
+        <!-- commons-pool2 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+
+        <!-- bikcache -->
+        <dependency>
+            <groupId>com.bikcache</groupId>
+            <artifactId>bikcache</artifactId>
+            <version>1.1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bikcache-api-1.1.0.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
