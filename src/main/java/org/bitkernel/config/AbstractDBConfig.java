@@ -31,7 +31,7 @@ public class AbstractDBConfig {
     @NotNull
     public DataSource getDataSource() {
         String host = "127.0.0.1";
-        String dbInst = "test";
+        String dbInst = "mysql";
         String username = "root";
         String password = "1234";
 

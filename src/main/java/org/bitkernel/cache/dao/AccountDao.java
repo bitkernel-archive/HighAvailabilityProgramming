@@ -1,7 +1,6 @@
 package org.bitkernel.cache.dao;
 
 import com.sun.istack.internal.NotNull;
-import io.bikcache.core.annotation.BikCacheable;
 import lombok.extern.slf4j.Slf4j;
 import org.bitkernel.cache.entity.AccountInfo;
 import org.hibernate.Session;
@@ -33,7 +32,6 @@ public class AccountDao {
         return _sessionFactory.getCurrentSession();
     }
 
-    @BikCacheable(key = "'id_' + #accountId", cacheNames = "account_info")
     public AccountInfo getAccountInfo(long accountId) {
         CriteriaBuilder cb = getSession().getCriteriaBuilder();
         CriteriaQuery<AccountInfo> cq = cb.createQuery(AccountInfo.class);

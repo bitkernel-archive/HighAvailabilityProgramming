@@ -21,7 +21,7 @@ public class AccountInfo implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     @Column(name = "email", length = 30)
     private String email;
