@@ -1,6 +1,6 @@
 package org.bitkernel.config;
 
-import com.sun.istack.internal.NotNull;
+import com.sun.istack.NotNull;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.logging.log4j.util.Strings;
 import org.hibernate.SessionFactory;

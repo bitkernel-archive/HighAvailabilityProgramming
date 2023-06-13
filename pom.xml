@@ -98,7 +98,7 @@
 
         <!-- bikcache -->
         <dependency>
-            <groupId>com.bikcache</groupId>
+            <groupId>io.bikcache</groupId>
             <artifactId>bikcache</artifactId>
             <version>1.1.0</version>
             <scope>system</scope>

@@ -12,16 +12,19 @@ import java.io.IOException;
 public class BikCacheConfiguration {
     @Bean
     public CacheChannel initBikCache() throws IOException {
-        BikCacheConfig.RedisConfig lettuceConfig = BikCacheConfig.RedisConfig.builder()
-                .mode("single")
-                .hosts("127.0.0.1:6379")
-                .password("")
-                .build();
-
-        BikCacheConfig cacheConfig = BikCacheConfig.builder()
-                .l2KeyNamespace("bitkernel.high_availability.programming.loginApplication")
-                .build();
-
-        return BikCacheApi.init(cacheConfig, lettuceConfig);
+        String configFile = "D:\\高可用编程\\HighAvailabilityProgramming\\src\\main\\resources\\bikcache-jedis+jedis.properties";
+//        BikCacheConfig.RedisConfig lettuceConfig = BikCacheConfig.RedisConfig.builder()
+//                .mode("single")
+//                .hosts("127.0.0.1:6379")
+//                .password("")
+//                .build();
+//
+//        BikCacheConfig cacheConfig = BikCacheConfig.builder()
+//                .l2KeyNamespace("bitkernel.high_availability.programming.loginApplication")
+//                .build();
+//
+//        return BikCacheApi.init(cacheConfig, lettuceConfig, configFile);
+//        CacheChannel.setCacheStatsLevel(2);
+        return BikCacheApi.init(configFile);
     }
 }

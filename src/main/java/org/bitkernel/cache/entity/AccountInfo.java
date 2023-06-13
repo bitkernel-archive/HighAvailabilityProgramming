@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "my_user_table")
+@Table(name = "account_info")
 public class AccountInfo implements Serializable {
     private static final long serialVersionUID = 3826906852679556530L;
     @Id

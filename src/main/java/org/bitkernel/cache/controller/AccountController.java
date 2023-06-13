@@ -20,4 +20,9 @@ public class AccountController {
     public AccountInfo getCachedAccountById(@PathVariable long id) {
         return accountService.getCachedAccountInfo(id);
     }
+
+    @GetMapping("cache/id2/{id}")
+    public AccountInfo getCachedAccountById2(@PathVariable long id) {
+        return accountService.getAccountInfoViaCallBackApi(id);
+    }
 }

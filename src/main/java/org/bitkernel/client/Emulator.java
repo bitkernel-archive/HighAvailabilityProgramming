@@ -117,7 +117,6 @@ public class Emulator {
 class User {
     @Getter
     private final int id;
-
     @Getter
     private int numVisits;
     @Getter
