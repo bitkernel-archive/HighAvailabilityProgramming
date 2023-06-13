@@ -51,4 +51,23 @@ END
 
 ![](figs/myUserTableContent.png)
 
-## BikCache 组件
+## BikCache 本地存储最大条目数量估算
+
+AccountInfo 类占用字节大小估算
+
+- 对象头：16 字节
+- int 类型的 id：4 字节
+- 固定 22 个字符的 String 类型的 email：16 + 4 + 22 = 44 字节
+- 固定 32 个字符的 String 类型的 password：16 + 4 + 32 = 52 字节
+- LocalDateTime 类型的 validDate：16 + 8 + 8 = 32 字节
+- int 类型的 status：4 字节
+- LocalDateTime 类型的 createTime：16 + 8 + 8 = 32 字节
+- LocalDateTime 类型的 changeTime：16 + 8 + 8 = 32 字节
+- 固定 1024 个字符的 String 类型的 text：16 + 1024 = 1040 字节
+- 填充字节：2 字节
+
+总共字节大小 = 1216 字节
+
+BikCache 本地存储最大条目数量 = 500 * 1024 * 1024 / 1216 = 431157 条
+
+由于 Map 本身也占用内存大小，因此我们设置 BikCache 的最大条目数量为 40*10000 条
