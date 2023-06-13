@@ -44,7 +44,7 @@ public class Emulator {
         logger.info("Create {} users success", USER_NUMBER);
         logger.info("Access number per user: {}, total access number: {}",
                 ACCESS_PER_USER, TOTAL_ACCESS_NUM);
-        logger.info("Minimal interval: {}, for each user to access server", MIN_INTERVAL_IN_MINUTES);
+        logger.info("Minimal interval: {} min, for each user to access server", MIN_INTERVAL_IN_MINUTES);
 
         int threadNum = Runtime.getRuntime().availableProcessors() + 1;
         int perThreadAccessNum = (int) (TOTAL_ACCESS_NUM * 1.0 / threadNum);
@@ -104,7 +104,7 @@ public class Emulator {
 
     private void sendRequest(@NotNull User user) {
         try {
-            String urlFormat = "http://%s:%d/account/cache/id/%d";
+            String urlFormat = "http://%s:%d/account/cache/id2/%d";
             String url = String.format(urlFormat, ip, port, user.getId());
             String response = HttpUtils.sendGetRequest(url);
             logger.debug("Response for " + url + ": " + response);
