@@ -1,65 +1,75 @@
-package org.bitkernel;
+package org.bitkernel.client;
 
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 
 @Slf4j
-public class ClientEmulator {
+public class Emulator {
     private static final int USER_NUMBER = 30 * 10000;
     private static final int ACCESS_PER_USER = 3;
-    private static final long MIN_INTERVAL_IN_MINUTES = 5;
+    private static final long MIN_INTERVAL_IN_MINUTES = 1;
     private static final Random random = new Random();
     private static final String ip = "localhost";
     private static final int port = 8080;
     private final List<User> users = new ArrayList<>();
-    private final AtomicInteger completedNum = new AtomicInteger();
+    private final LongAdder completedNum = new LongAdder();
+    private final LongAdder accessNum = new LongAdder();
 
     public static void main(String[] args) {
-        ClientEmulator emulator = new ClientEmulator();
+        Emulator emulator = new Emulator();
         emulator.run();
     }
 
     public void run() {
+        logger.info("Start client emulator");
         for (int i = 0; i < USER_NUMBER; i++) {
             User user = new User(i);
             users.add(user);
         }
 
+        int totalAccessNum = USER_NUMBER * ACCESS_PER_USER;
         int threadNum = Runtime.getRuntime().availableProcessors() + 1;
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadNum);
         for (int i = 0; i < threadNum; i++) {
             executor.execute(new Executor());
         }
+        logger.info("Create {} threads, need to access {} times in total", threadNum, totalAccessNum);
     }
 
     class Executor implements Runnable {
         @Override
         public void run() {
-            while (completedNum.get() < USER_NUMBER) {
+            while (completedNum.intValue() < USER_NUMBER) {
                 int idx = random.nextInt(USER_NUMBER);
                 User u = users.get(idx);
-                if (!canAccess(u)) {
-                    continue;
-                }
-                sendRequest(u);
-                u.incNumVisits();
-                if (u.getNumVisits() == ACCESS_PER_USER) {
-                    int completed = completedNum.getAndIncrement() + 1;
-                    logger.info("Id({}) access complete, total {} complete", u.getId(), completed);
+                synchronized (u) {
+                    if (!canAccess(u)) {
+                        continue;
+                    }
+                    try {
+                        sendRequest(u);
+                    } catch (IOException e) {
+                        logger.error(e.getMessage());
+                    }
+                    u.incNumVisits();
+                    accessNum.increment();
+                    if (u.getNumVisits() == ACCESS_PER_USER) {
+                        completedNum.increment();
+                        logger.debug("Id({}) access complete, total {} complete", u.getId(), completedNum.intValue());
+                    }
+                    if (accessNum.intValue() % 10000 == 0) {
+                        logger.info("access {}, complete {}", accessNum.intValue(), completedNum.intValue());
+                    }
                 }
             }
         }
@@ -70,33 +80,11 @@ public class ClientEmulator {
         }
     }
 
-    private void sendRequest(@NotNull User user) {
+    private void sendRequest(@NotNull User user) throws IOException {
         String urlFormat = "http://%s:%d/account/cache/id/%d";
         String url = String.format(urlFormat, ip, port, user.getId());
-        try {
-            URL obj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-            con.setRequestMethod("GET");
-
-            int responseCode = con.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(
-                        con.getInputStream()));
-                String inputLine;
-                StringBuilder response = new StringBuilder();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                logger.debug("Response for " + url + ": " + response);
-            } else {
-                logger.error("Error while accessing " + url + ", response code: " + responseCode);
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        String response = HttpUtils.sendGetRequest(url);
+        logger.info("Response for " + url + ": " + response);
     }
 }
 

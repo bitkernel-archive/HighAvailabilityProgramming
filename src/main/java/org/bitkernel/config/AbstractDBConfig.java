@@ -25,7 +25,7 @@ public class AbstractDBConfig {
     /** hibernate config field */
     protected String dialect = "org.hibernate.dialect.MySQL55Dialect";
     protected String hbm2ddlAuto = "update";
-    protected boolean showSql  = false;
+    protected boolean showSql = false;
     protected boolean generateStatistics = false;
 
     @NotNull
