@@ -85,12 +85,62 @@ BikCache 本地存储最大条目数量 = 500 * 1024 * 1024 / 1216 = 431157 条
 
 大致逻辑：
 
-- 生成用户
-- 启动若干线程
-- 计算每个线程需要执行的访问次数
+- 首先生成 USER_NUMBER 个用户
+
+```java
+for (int i = 0; i < USER_NUMBER; i++) {
+     User user = new User(i);
+     users.add(user);
+}
+```
+
+- 计算要启动的线程数量和每个线程要完成的访问次数
+
+```java
+int threadNum = Runtime.getRuntime().availableProcessors() + 1;
+int perThreadAccessNum = (int) (TOTAL_ACCESS_NUM * 1.0 / threadNum);
+```
+
 - 计算每个线程执行一次访问需要间隔多少时间
-- 计算每个线程执行一次访问需要
-- 模拟访问
+
+```java
+long emulateSeconds = TimeUnit.MINUTES.toSeconds(EMULATE_TIME_IN_MINUTES);
+perAccessIntervalInMills = (int) (1000 / (perThreadAccessNum * 1.0 / emulateSeconds));
+```
+
+- 启动若干线程模拟访问
+
+```java
+ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threadNum);
+for (int i = 0; i < threadNum; i++) {
+    executor.execute(new Executor());
+}
+```
+
+- 每个线程随机获取用户进行访问，每访问一次，平均随机休眠 perAccessIntervalInMills 的时间
+
+```java
+public void run() {
+    while (completedNum.intValue() < USER_NUMBER) {
+        int idx = random.nextInt(USER_NUMBER);
+        User u = users.get(idx);
+        synchronized (u) {
+            if (!canAccess(u)) {
+                continue;
+            }
+            sendRequest(u);
+            increase(u);
+        }
+        int sleepNum = random.nextInt(perAccessIntervalInMills * 2) + 1;
+        try {
+            Thread.sleep(sleepNum);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+执行示意图：
 
 ![](figs/emulator.png)
 
