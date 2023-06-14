@@ -100,9 +100,16 @@
         <dependency>
             <groupId>io.bikcache</groupId>
             <artifactId>bikcache</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.0-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/bikcache-api-1.1.0.jar</systemPath>
+        </dependency>
+
+        <!-- 注解扫描！！！ -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>4.3.18.RELEASE</version>
         </dependency>
 
         <dependency>
