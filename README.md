@@ -66,7 +66,9 @@ AccountInfo 类占用字节大小估算
 - 固定 1024 个字符的 String 类型的 text：16 + 1024 = 1040 字节
 - 填充字节：2 字节
 
-总共字节大小 = 1216 字节
+总共字节大小 = 1216 字节，估算值和测试返回的报文的内容字节大小相近，不相同是因为格式是 json
+
+![](figs/contentLength.png)
 
 BikCache 本地存储最大条目数量 = 500 * 1024 * 1024 / 1216 = 431157 条
 
@@ -117,7 +119,7 @@ for (int i = 0; i < threadNum; i++) {
 }
 ```
 
-- 每个线程随机获取用户进行访问，每访问一次，平均随机休眠 perAccessIntervalInMills 的时间
+- 每个线程随机获取用户进行访问，每访问一次，平均随机休眠 perAccessIntervalInMills 的时间，这样可以让模拟器模拟执行指定的时间长度
 
 ```java
 public void run() {
